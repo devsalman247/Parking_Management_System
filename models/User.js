@@ -22,7 +22,9 @@ const userSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'Vehicle'
     },
-    "salt"   : String
+    "salt"   : {
+        type : String
+    }
 },{timestamps : true});
 
 userSchema.plugin(uniqueValidator, {message : 'is already taken.'});

@@ -21,8 +21,12 @@ const VehicleSchema= new mongoose.Schema({
     "spot" : {
         type : Number
     },
-    "booked_At" : Date,
-    "endBooking" : Date,
+    "booked_At" : {
+        type : Date
+    },
+    "endBooking" : {
+        type : Date
+    },
     "bill" : {              // $20/hour
         type : String,  
         default : "$0"
