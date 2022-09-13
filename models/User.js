@@ -54,8 +54,4 @@ userSchema.methods.toAuthJSON = function() {
     }
 };
 
-userSchema.methods.verifyJWT = function(token) {
-    return jwt.verify(token, secret);
-};
-
 module.exports = mongoose.model('User', userSchema);
