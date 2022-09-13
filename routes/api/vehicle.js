@@ -35,15 +35,17 @@ router.post('/add', isStaff,(req, res) => {
                 res.send({error : {message : "User doesn't exist"}})
             }
             const addVehicle = new Vehicle();
-                addVehicle._id = data._id;
-                addVehicle.owner = owner;
+                addVehicle.owner = data.id;
                 addVehicle.model = model;
             addVehicle.save()
-            .then(data => {
-                if(!data) {
+            .then(vehicleData => {
+                if(!vehicleData) {
                     res.send("Please try again");
+                }else {
+                    data.vehicle = vehicleData.id;
+                    data.save();
+                    res.send({success : true, message : "Vehicle added successfully"});
                 }
-                res.send({success : true, message : "Vehicle added successfully"});
             })
             .catch(err => {
                 res.send({error : {message : err.message}});

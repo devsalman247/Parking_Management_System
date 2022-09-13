@@ -19,7 +19,7 @@ router.post("/signup", (req, res) => {
   user.save()
   .then((data) => {
     if(!data) {
-      res.send({error : {message : "No user found"}});
+      res.send({error : {message : "Signed up failed.Try again!"}});
     }
     res.send(user.toAuthJSON());
   })
@@ -34,7 +34,7 @@ router.post("/login", function (req, res, next) {
   if (!email || !password) {
     return res.status(422).send({
       error: {
-        message: "Email and password field must be provided to login.",
+        message: "Email and password field must be provided to login."
       },
     });
   }
@@ -56,10 +56,10 @@ router.post("/login", function (req, res, next) {
 
 // admin
 router.get("/all", verifyToken, isAdmin, (req, res) => {
-  User.find({ role: 0 }).select("id email vehicle").populate("vehicle")
+  User.find({ role: 0 }).populate("vehicle", "model isBooked booked_At endBooking").select("id email vehicle")
     .then((data) => {
       if (!data) {
-        return res.send(`No users found`);
+        return res.send(`No user found`);
       } else {
         return res.send(data);
       }

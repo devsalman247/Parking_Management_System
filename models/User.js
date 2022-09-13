@@ -18,10 +18,10 @@ const userSchema = new mongoose.Schema({
     "role" : { 
         type : Number, // 0=user, 1=admin, 2=staff
     },
-    "vehicle" : {
+    "vehicle" : [{
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'Vehicle'
-    },
+    }],
     "salt"   : {
         type : String
     }
