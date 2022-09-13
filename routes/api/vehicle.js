@@ -10,7 +10,7 @@ router.use(verifyToken);
 router.get('/', (req, res) => {
     const {owner} = req.body;
     if(owner) {
-        Vehicle.find({owner})
+        Vehicle.find({owner}).populate("owner", "id email")
         .then(data => {
             if(!data) {
                 res.send({error : {message : "User not found"}})
@@ -35,6 +35,7 @@ router.post('/add', isStaff,(req, res) => {
                 res.send({error : {message : "User doesn't exist"}})
             }
             const addVehicle = new Vehicle();
+                addVehicle._id = data._id;
                 addVehicle.owner = owner;
                 addVehicle.model = model;
             addVehicle.save()
@@ -73,7 +74,7 @@ router.delete('/delete', isStaff,(req, res) => {
 
 // admin
 router.get('/all',isAdmin_Staff,(req, res) => {
-    Vehicle.find()
+    Vehicle.find().populate("owner", "id email")
     .then(data => {
         if(!data) {
             res.send({error : {message : "No vehicle added yet"}})
