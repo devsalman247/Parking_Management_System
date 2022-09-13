@@ -1,7 +1,5 @@
-const mongoose = require('mongoose'),
-    jwt = require('jsonwebtoken'),
-    secret = require('../config/index').secret,
-    User = mongoose.model('User');
+const jwt = require('jsonwebtoken'),
+    secret = require('../config/index').secret;
 
 const verifyToken = function(req, res, next) {
     const {authorization} = req.headers;
@@ -27,7 +25,7 @@ const isAdmin = function(req, res, next) {
     if(req.user.role===1) {
         next()
     }else{
-        res.send({error : {message : "Only admin can perform this operation."}})
+        res.send({error : {message : "Only admin has this permission."}})
     }
 }
 
@@ -35,7 +33,7 @@ const isStaff = function(req, res, next) {
     if(req.user.role===2) {
         next()
     }else {
-        res.send({error : {message : "Only staff can perform this operation."}})
+        res.send({error : {message : "Only staff has this permission."}})
     }
 }
 
@@ -43,7 +41,7 @@ const isAdmin_Staff = function(req, res, next) {
     if(req.user.role===2 || req.user.role===1) {
         next()
     }else {
-        res.send({error : {message : "Only staff can perform this operation."}})
+        res.send({error : {message : "Only admin and staff have this permission."}})
     }
 }
 
