@@ -42,8 +42,8 @@ router.post('/add', auth.isStaff,(req, res) => {
                 if(!vehicleData) {
                     res.send("Please try again");
                 }else {
-                    data.vehicle = vehicleData.id;
-                    data.save();
+                    vehicle.vehicle = vehicleData.id;
+                    vehicle.save();
                     res.send({success : true, message : "Vehicle added successfully"});
                 }
             })
