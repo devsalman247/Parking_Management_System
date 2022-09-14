@@ -1,13 +1,11 @@
-const User = require('../../models/User');
-
 const router = require('express').Router(),
-    Floor = require('../../models/Floor'),
-    {verifyToken, isAdmin} = require('./../auth');
+      Floor = require('../../models/Floor'),
+      auth = require('./../auth');
 
-router.use(verifyToken);
+router.use(auth.verifyToken);
 
 // admin
-router.post('/add', isAdmin ,(req, res) => {
+router.post('/add', auth.isAdmin ,(req, res) => {
     const {floor ,limit} = req.body;
     const addFloor = new Floor();
     addFloor.floor = floor;
@@ -28,7 +26,7 @@ router.post('/add', isAdmin ,(req, res) => {
 });
 
 // admin
-router.delete('/delete', isAdmin ,(req, res) => {
+router.delete('/delete', auth.isAdmin ,(req, res) => {
     const {floor} = req.body ;
     if(floor && typeof(floor)==="number" && floor>0) {
         Floor.deleteOne({floor})
@@ -51,7 +49,7 @@ router.delete('/delete', isAdmin ,(req, res) => {
 });
 
 // admin
-router.get('/', isAdmin ,(req, res) => {
+router.get('/', auth.isAdmin ,(req, res) => {
     const floor = req.body.floor;
     if(floor && typeof(floor)==="number") {
         Floor.findOne({floor}).select('spots floor limit')

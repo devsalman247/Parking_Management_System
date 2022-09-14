@@ -1,11 +1,11 @@
 const router = require('express').Router(),
-        {verifyToken, isStaff, isAdmin_Staff} = require('../auth'),
-        Vehicle = require('../../models/Vehicle');
+      auth = require('../auth'),
+      Vehicle = require('../../models/Vehicle');
 
-router.use(verifyToken);
+router.use(auth.verifyToken);
 
 // staff
-router.get('/', isStaff,(req, res, next) => {
+router.get('/', auth.isStaff,(req, res, next) => {
     const {booked_At} = req.body;
     Vehicle.find({
         booked_At : {
@@ -26,7 +26,7 @@ router.get('/', isStaff,(req, res, next) => {
 });
 
 // staff
-router.post('/add', isStaff,(req, res, next) => {
+router.post('/add', auth.isStaff,(req, res, next) => {
     const {model, floor, spot, endBooking} = req.body;
     if(floor || spot || endBooking) {
         Vehicle.findOne({model})
@@ -53,7 +53,7 @@ router.post('/add', isStaff,(req, res, next) => {
     }
 });
 
-router.put('/remove', isStaff, (req, res, next) => {
+router.put('/remove', auth.isStaff, (req, res, next) => {
     const {model} = req.body;
     Vehicle.findOne({model})
     .then(data => {
@@ -87,7 +87,7 @@ router.put('/remove', isStaff, (req, res, next) => {
 })
 
 // admin, staff
-router.get('/all', isAdmin_Staff,(req, res, next) => {
+router.get('/all', auth.isAdmin_Staff,(req, res, next) => {
     Vehicle.find({isBooked: true})
     .then(data => {
         if(!data) {

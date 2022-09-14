@@ -1,8 +1,8 @@
 const router = require("express").Router(),
-  passport = require("passport"),
-  strategy = require("../../config/passport"),
-  {verifyToken, isAdmin} = require("../auth"),
-  User = require("../../models/User");
+      passport = require("passport"),
+      strategy = require("../../config/passport"),
+      auth = require("../auth"),
+      User = require("../../models/User");
 
 passport.use(strategy);
 
@@ -55,7 +55,7 @@ router.post("/login", function (req, res, next) {
 });
 
 // admin
-router.get("/all", verifyToken, isAdmin, (req, res) => {
+router.get("/all", auth.verifyToken, auth.isAdmin, (req, res) => {
   User.find({ role: 0 }).populate("vehicle", "model isBooked booked_At endBooking").select("id email vehicle")
     .then((data) => {
       if (!data) {

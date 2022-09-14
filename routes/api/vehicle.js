@@ -1,10 +1,10 @@
 const router = require('express').Router(),
-    {verifyToken,isAdmin,isStaff, isAdmin_Staff} = require('../auth'),
-    User = require("../../models/User"),
-    Floor = require("../../models/Floor"),
-    Vehicle = require('../../models/Vehicle');
+      auth = require('../auth'),
+      User = require("../../models/User"),
+      Floor = require("../../models/Floor"),
+      Vehicle = require('../../models/Vehicle');
 
-router.use(verifyToken);
+router.use(auth.verifyToken);
 
 // user, admin , staff
 router.get('/', (req, res) => {
@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
 });
 
 // staff
-router.post('/add', isStaff,(req, res) => {
+router.post('/add', auth.isStaff,(req, res) => {
     const {model, owner} = req.body;
     if(owner && typeof(owner)==="string" && model && typeof(model)==="string") {
         User.findById(owner)
@@ -60,7 +60,7 @@ router.post('/add', isStaff,(req, res) => {
 });
 
 // staff
-router.delete('/delete', isStaff,(req, res) => {
+router.delete('/delete', auth.isStaff,(req, res) => {
     const {model} = req.body;
     Vehicle.findOneAndDelete({model})
     .then(data => {
@@ -75,7 +75,7 @@ router.delete('/delete', isStaff,(req, res) => {
 });
 
 // admin
-router.get('/all',isAdmin_Staff,(req, res) => {
+router.get('/all',auth.isAdmin_Staff,(req, res) => {
     Vehicle.find().populate("owner", "id email")
     .then(data => {
         if(!data) {

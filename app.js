@@ -1,8 +1,8 @@
 const express = require('express'),
-    app = express(),
-    mongoose = require('mongoose'),
-    router = require('./routes'),
-    PORT = process.env.PORT || 3000;
+      app = express(),
+      mongoose = require('mongoose'),
+      router = require('./routes'),
+      PORT = process.env.PORT || 3000;
 
 mongoose.connect("mongodb://127.0.0.1:27017/parkingdb", () => {
     app.listen(PORT, () => {
