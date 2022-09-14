@@ -14,11 +14,11 @@ router.post('/add', auth.isAdmin ,(req, res) => {
         addFloor.spots.push({spot:i})
     }
     addFloor.save()
-    .then((data) => {
-        if(!data) {
+    .then((floor) => {
+        if(!floor) {
             res.send('Try again')
         }
-        res.send({message : "Success", data : data});
+        res.send({message : "Success", data : floor});
     })
     .catch(err => {
         res.send({error : {message : err.message}});
@@ -30,10 +30,10 @@ router.delete('/delete', auth.isAdmin ,(req, res) => {
     const {floor} = req.body ;
     if(floor && typeof(floor)==="number" && floor>0) {
         Floor.deleteOne({floor})
-        .then((data) => {
-            if(!data) {
+        .then((floor) => {
+            if(!floor) {
                 res.send("Please try again")
-            }else if(data.deletedCount===0) {
+            }else if(floor.deletedCount===0) {
                 res.send({error : {message : "Floor doesn't exist"}})
             }
             res.send({message : "Floor deleted successfully"})
@@ -53,11 +53,11 @@ router.get('/', auth.isAdmin ,(req, res) => {
     const floor = req.body.floor;
     if(floor && typeof(floor)==="number") {
         Floor.findOne({floor}).select('spots floor limit')
-        .then(data => {
-            if(!data) {
+        .then(floorFound => {
+            if(!floorFound) {
                 res.send({error : {message : "Floor doesn't exist"}});
             }
-            res.send(data)
+            res.send(floorFound)
         })
         .catch(err => {
             res.send(err.message);

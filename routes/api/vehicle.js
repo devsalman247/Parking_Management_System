@@ -11,11 +11,11 @@ router.get('/', (req, res) => {
     const {owner} = req.body;
     if(owner) {
         Vehicle.find({owner}).populate("owner", "id email")
-        .then(data => {
-            if(!data) {
+        .then(vehicle => {
+            if(!vehicle) {
                 res.send({error : {message : "User not found"}})
             }
-            res.send(data);
+            res.send(vehicle);
         })
         .catch(e => {
             res.send({error : {message : e.message}})
@@ -30,12 +30,12 @@ router.post('/add', auth.isStaff,(req, res) => {
     const {model, owner} = req.body;
     if(owner && typeof(owner)==="string" && model && typeof(model)==="string") {
         User.findById(owner)
-        .then(data => {
-            if(!data) {
+        .then(vehicle => {
+            if(!vehicle) {
                 res.send({error : {message : "User doesn't exist"}})
             }
             const addVehicle = new Vehicle();
-                addVehicle.owner = data.id;
+                addVehicle.owner = vehicle.id;
                 addVehicle.model = model;
             addVehicle.save()
             .then(vehicleData => {
@@ -63,8 +63,8 @@ router.post('/add', auth.isStaff,(req, res) => {
 router.delete('/delete', auth.isStaff,(req, res) => {
     const {model} = req.body;
     Vehicle.findOneAndDelete({model})
-    .then(data => {
-        if(!data) {
+    .then(vehicle => {
+        if(!vehicle) {
             res.send({error : {message : "Vehicle is not present"}});
         }
         res.send({success : "true", message : "Vehicle deleted successfully"})
@@ -77,11 +77,11 @@ router.delete('/delete', auth.isStaff,(req, res) => {
 // admin
 router.get('/all',auth.isAdmin_Staff,(req, res) => {
     Vehicle.find().populate("owner", "id email")
-    .then(data => {
-        if(!data) {
+    .then(vehicle => {
+        if(!vehicle) {
             res.send({error : {message : "No vehicle added yet"}})
         }
-        res.send({message : "success", data });
+        res.send({message : "success", vehicle });
     }) 
     .catch(e => {
         res.send({error : {message: e.message}})

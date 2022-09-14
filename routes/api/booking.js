@@ -14,11 +14,11 @@ router.get('/', auth.isStaff,(req, res, next) => {
         }, 
         isBooked : true
     })
-    .then(data => {
-        if(!data) {
+    .then(vehicle => {
+        if(!vehicle) {
             res.send({message : "No vehicle booked at provided date"})
         }
-        res.send(data);
+        res.send(vehicle);
     })
     .catch(e => {
         res.send({error : {message : e.message}})
@@ -30,8 +30,8 @@ router.post('/add', auth.isStaff,(req, res, next) => {
     const {model, floor, spot, endBooking} = req.body;
     if(floor || spot || endBooking) {
         Vehicle.findOne({model})
-        .then(data => {
-            if(!data) {
+        .then(vehicle => {
+            if(!vehicle) {
                 res.send({error : {message : "Vehicle is not present"}})
             }
             Vehicle.updateOne({model}, {$set : {floor,spot, isBooked : true, booked_At : Date.now(), endBooking : new Date(endBooking)}})
@@ -56,14 +56,14 @@ router.post('/add', auth.isStaff,(req, res, next) => {
 router.put('/remove', auth.isStaff, (req, res, next) => {
     const {model} = req.body;
     Vehicle.findOne({model})
-    .then(data => {
-        if(!data) {
+    .then(vehicle => {
+        if(!vehicle) {
             res.send({error : {message : "Vehicle is not present"}})
-        }else if(data.isBooked===false) {
+        }else if(vehicle.isBooked===false) {
             res.send({error : {message : "Vehicle is not booked yet"}})
         }
-        const startTime = data.booked_At;
-        const endTime = data.endBooking;
+        const startTime = vehicle.booked_At;
+        const endTime = vehicle.endBooking;
         let fine = 0;
         const fineTime = Math.floor((Date.now() - endTime)/60000);
         if(fineTime>=15) {
@@ -89,11 +89,11 @@ router.put('/remove', auth.isStaff, (req, res, next) => {
 // admin, staff
 router.get('/all', auth.isAdmin_Staff,(req, res, next) => {
     Vehicle.find({isBooked: true})
-    .then(data => {
-        if(!data) {
+    .then(vehicle => {
+        if(!vehicle) {
             res.send({success : true, message : "No vehicle has booked yet"})
         }
-        res.send(data);
+        res.send(vehicle);
     })
     .catch(e => {
         res.send({error : {message : e.message}})
