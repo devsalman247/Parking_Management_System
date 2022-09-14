@@ -2,7 +2,7 @@ const mongoose = require('mongoose'),
       uniqueValidator = require('mongoose-unique-validator'),
       bcrypt = require('bcrypt'),
       jwt = require('jsonwebtoken'),
-      secret = require('../config').secret;
+      secret = require('../config/env/index').secret;
 
 const userSchema = new mongoose.Schema({
     "email" : {
