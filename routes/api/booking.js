@@ -6,11 +6,11 @@ router.use(auth.verifyToken);
 
 // staff
 router.get('/', auth.isStaff,(req, res, next) => {
-    const {booked_At} = req.body;
+    const {bookedAt} = req.body;
     Vehicle.find({
-        booked_At : {
-            $lte : (new Date(booked_At)).setHours(23,59,59,999),
-            $gte : new Date(booked_At)
+        bookedAt : {
+            $lte : (new Date(bookedAt)).setHours(23,59,59,999),
+            $gte : new Date(bookedAt)
         }, 
         isBooked : true
     })
@@ -34,7 +34,7 @@ router.post('/add', auth.isStaff,(req, res, next) => {
             if(!vehicle) {
                 res.send({error : {message : "Vehicle is not present"}})
             }
-            Vehicle.updateOne({model}, {$set : {floor,spot, isBooked : true, booked_At : Date.now(), endBooking : new Date(endBooking)}})
+            Vehicle.updateOne({model}, {$set : {floor,spot, isBooked : true, bookedAt : Date.now(), endBooking : new Date(endBooking)}})
             .then(data => {
                 if(!data) {
                     res.send({error : {message : "Vehicle can't be booked.Try again!"}})
@@ -62,7 +62,7 @@ router.put('/remove', auth.isStaff, (req, res, next) => {
         }else if(vehicle.isBooked===false) {
             res.send({error : {message : "Vehicle is not booked yet"}})
         }
-        const startTime = vehicle.booked_At;
+        const startTime = vehicle.bookedAt;
         const endTime = vehicle.endBooking;
         let fine = 0;
         const fineTime = Math.floor((Date.now() - endTime)/60000);

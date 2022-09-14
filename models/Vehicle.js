@@ -21,7 +21,7 @@ const VehicleSchema= new mongoose.Schema({
     "spot" : {
         type : Number
     },
-    "booked_At" : {
+    "bookedAt" : {
         type : Date
     },
     "endBooking" : {
@@ -38,14 +38,14 @@ const VehicleSchema= new mongoose.Schema({
 },{timestamps : true});
 
 VehicleSchema.methods.toJSON = function() {
-    const date = new Date(this.booked_At).toUTCString();
+    const date = new Date(this.bookedAt).toUTCString();
     return {
         owner : this.owner,
         model : this.model,
         isBooked : this.isBooked,
         floor : this.floor,
         spot : this.spot,
-        bookedAt : date==="Invalid Date" ? this.booked_At : date 
+        bookedAt : date==="Invalid Date" ? this.bookedAt : date 
     }
 }
 

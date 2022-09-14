@@ -56,7 +56,7 @@ router.post("/login", function (req, res, next) {
 
 // admin
 router.get("/all", auth.verifyToken, auth.isAdmin, (req, res) => {
-  User.find({ role: 0 }).populate("vehicle", "model isBooked booked_At endBooking").select("id email vehicle")
+  User.find({ role: 0 }).populate("vehicle", "model isBooked bookedAt endBooking").select("id email vehicle")
     .then((data) => {
       if (!data) {
         return res.send(`No user found`);
