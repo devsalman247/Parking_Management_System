@@ -39,7 +39,8 @@ userSchema.pre('save', async function(){
 });
 
 userSchema.methods.generateJWT = function() {
-  return jwt.sign({
+  return jwt.sign(
+    {
     id: this._id,
     email: this.email,
     role: this.role , 
